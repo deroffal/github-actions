@@ -32,3 +32,10 @@ runs:
     - name: 'Run integration tests'
       shell: bash
       run: mvn verify
+
+    - name: 'Upload artifact'
+      uses: actions/upload-artifact@v3
+      if: ${{ inputs.artifact-path != '' }}
+      with:
+        name: 'build-artifact'
+        path: ${{ inputs.artifact-path }}
