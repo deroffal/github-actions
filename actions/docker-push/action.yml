@@ -1,0 +1,33 @@
+---
+name: 'Docker push'
+description: 'Push a Docker image to Docker Hub'
+
+inputs:
+  image-name:
+    description: 'name of the Docker image'
+    required: true
+  tag-name:
+    description: 'name of the tag to push'
+    required: true
+  dockerhub-username:
+    description: 'username of Docker Hub account'
+    required: true
+  dockerhub-token:
+    description: 'token of Docker Hub account'
+    required: true
+
+runs:
+  using: composite
+  steps:
+
+    - name: 'Login to Docker Hub'
+      uses: docker/login-action@master
+      with:
+        username: ${{ inputs.dockerhub-username }}
+        password: ${{ inputs.dockerhub-token }}
+
+    - name: 'Push to Docker Hub'
+      shell: 'bash'
+      run: |
+        docker tag ${{ inputs.image-name }} ${{ inputs.image-name }}:${{ inputs.tag-name }}
+        docker push ${{ inputs.image-name }}:${{ inputs.tag-name }}
