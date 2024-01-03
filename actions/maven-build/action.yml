@@ -14,6 +14,10 @@ inputs:
   artifact-path:
     required: false
     description: 'If needed, the path of the artifact to upload (wildcards allowed)'
+  working-directory:
+    required: false
+    description: 'If needed, the working directory for this action'
+    default: '.'
 
 runs:
   using: 'composite'
@@ -27,10 +31,12 @@ runs:
 
     - name: 'Build and run unit tests'
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: mvn clean test
 
     - name: 'Run integration tests'
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: mvn verify
 
     - name: 'Upload artifact'

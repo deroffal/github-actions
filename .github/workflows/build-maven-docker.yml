@@ -45,9 +45,9 @@ jobs:
       cancel-in-progress: true
     timeout-minutes: 20
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ inputs.working-directory }}
+#    defaults:
+#      run:
+#        working-directory: ${{ inputs.working-directory }}
 
     steps:
 
@@ -59,6 +59,7 @@ jobs:
           java-version: ${{ inputs.java-version }}
           java-distribution: ${{ inputs.java-distribution }}
           artifact-path: ${{ inputs.artifact-path }}
+          working-directory: ${{ inputs.working-directory }}
 
       - name: Build Docker image
         uses: deroffal/github-actions/actions/docker-build@main
