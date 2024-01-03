@@ -15,6 +15,10 @@ inputs:
   dockerhub-token:
     description: 'token of Docker Hub account'
     required: true
+  working-directory:
+    required: false
+    description: 'If needed, the working directory for this action'
+    default: '.'
 
 runs:
   using: composite
@@ -28,6 +32,7 @@ runs:
 
     - name: 'Push to Docker Hub'
       shell: 'bash'
+      working-directory: ${{ inputs.working-directory }}
       run: |
         docker tag ${{ inputs.image-name }} ${{ inputs.image-name }}:${{ inputs.tag-name }}
         docker push ${{ inputs.image-name }}:${{ inputs.tag-name }}
