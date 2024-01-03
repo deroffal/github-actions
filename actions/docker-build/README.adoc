@@ -1,0 +1,27 @@
+= Docker build
+
+== Description
+
+The action will look for :
+
+* a `Dockerfile` -> to build with Docker
+* a `pom.xml` -> to build with Springboot Docker Maven plugin
+
+== Usage
+
+== Usage
+
+[source,yaml]
+----
+
+# ...
+
+jobs:
+  job-name:
+    # ...
+    steps:
+      - name: Build with Docker
+        uses: deroffal/github-actions/actions/docker-build@main
+        with:
+          image-name:
+----
