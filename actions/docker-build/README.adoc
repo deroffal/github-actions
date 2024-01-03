@@ -24,4 +24,5 @@ jobs:
         uses: deroffal/github-actions/actions/docker-build@main
         with:
           image-name:
+          working-directory: (optional)
 ----

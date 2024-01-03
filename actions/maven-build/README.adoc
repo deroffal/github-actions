@@ -34,4 +34,5 @@ jobs:
           java-version: (optional)
           java-distribution: (optional)
           artifact-path: (optional)
+          working-directory: (optional)
 ----

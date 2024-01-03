@@ -65,6 +65,7 @@ jobs:
         uses: deroffal/github-actions/actions/docker-build@main
         with:
           image-name: ${{ inputs.image-name }}
+          working-directory: ${{ inputs.working-directory }}
 
       - name: Push to Docker Hub
         uses: deroffal/github-actions/actions/docker-push@main
@@ -73,3 +74,4 @@ jobs:
           dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
           image-name: ${{ inputs.image-name }}
           tag-name: ${{ inputs.tag-name }}
+          working-directory: ${{ inputs.working-directory }}

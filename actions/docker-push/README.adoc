@@ -24,4 +24,5 @@ jobs:
           dockerhub-token:
           image-name:
           tag-name:
+          working-directory: (optional)
 ----
