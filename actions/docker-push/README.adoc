@@ -1,0 +1,27 @@
+= Docker push
+
+== Description
+
+The action will log in to Docker Hub, tag and push an image.
+
+== Usage
+
+== Usage
+
+[source,yaml]
+----
+
+# ...
+
+jobs:
+  job-name:
+    # ...
+    steps:
+      - name: Build with Docker
+        uses: deroffal/github-actions/actions/docker-push@main
+        with:
+          dockerhub-username:
+          dockerhub-token:
+          image-name:
+          tag-name:
+----

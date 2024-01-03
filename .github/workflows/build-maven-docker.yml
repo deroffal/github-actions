@@ -1,0 +1,74 @@
+---
+name: 'Build Docker image of Maven project'
+
+on:
+  workflow_call:
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+        description: 'Username of Docker Hub account'
+      DOCKERHUB_TOKEN:
+        required: true
+        description: 'Token of Docker Hub account'
+    inputs:
+      java-version:
+        required: false
+        default: '21'
+        type: string
+        description: 'Java version'
+      java-distribution:
+        required: false
+        default: 'temurin'
+        type: string
+        description: 'Java distribution'
+      artifact-path:
+        required: false
+        type: string
+        description: 'If needed, the path of the artifact to upload (wildcards allowed)'
+      image-name:
+        description: 'name of the Docker image'
+        required: true
+        type: string
+      tag-name:
+        description: 'tag of the Docker image'
+        required: true
+        type: string
+      working-directory:
+        type: string
+        description: 'Working directory of the build'
+        default: '.'
+        required: false
+jobs:
+  build-maven-docker:
+    concurrency:
+      group: ${{ github.ref }}
+      cancel-in-progress: true
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Build with Maven
+        uses: deroffal/github-actions/actions/maven-build@main
+        with:
+          java-version: ${{ inputs.java-version }}
+          java-distribution: ${{ inputs.java-distribution }}
+          artifact-path: ${{ inputs.artifact-path }}
+
+      - name: Build Docker image
+        uses: deroffal/github-actions/actions/docker-build@main
+        with:
+          image-name: ${{ inputs.image-name }}
+
+      - name: Push to Docker Hub
+        uses: deroffal/github-actions/actions/docker-push@main
+        with:
+          dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+          image-name: ${{ inputs.image-name }}
+          tag-name: ${{ inputs.tag-name }}
