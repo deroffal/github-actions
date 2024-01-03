@@ -3,6 +3,21 @@ name: 'CI - Maven'
 
 on:
   workflow_call:
+    inputs:
+      java-version:
+        required: false
+        default: '21'
+        type: string
+        description: 'Java version'
+      java-distribution:
+        required: false
+        default: 'temurin'
+        type: string
+        description: 'Java distribution'
+      artifact-path:
+        required: false
+        type: string
+        description: 'If needed, the path of the artifact to upload (wildcards allowed)'
 
 jobs:
   ci-maven:
@@ -17,3 +32,7 @@ jobs:
 
       - name: Build with Maven
         uses: deroffal/github-actions/actions/maven-build@main
+        with:
+          java-version: ${{ inputs.java-version }}
+          java-distribution: ${{ inputs.java-distribution }}
+          artifact-path: ${{ inputs.artifact-path }}
