@@ -18,6 +18,11 @@ on:
         required: false
         type: string
         description: 'If needed, the path of the artifact to upload (wildcards allowed)'
+      working-directory:
+        type: string
+        description: 'Working directory of the build'
+        default: '.'
+        required: false
 
 jobs:
   ci-maven:
@@ -33,3 +38,4 @@ jobs:
           java-version: ${{ inputs.java-version }}
           java-distribution: ${{ inputs.java-distribution }}
           artifact-path: ${{ inputs.artifact-path }}
+          working-directory: ${{ inputs.working-directory }}
