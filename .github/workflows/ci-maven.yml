@@ -21,9 +21,6 @@ on:
 
 jobs:
   ci-maven:
-    concurrency:
-      group: ${{ github.ref }}
-      cancel-in-progress: true
     timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:

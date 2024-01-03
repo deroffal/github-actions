@@ -38,17 +38,11 @@ on:
         description: 'Working directory of the build'
         default: '.'
         required: false
+
 jobs:
   build-maven-docker:
-    concurrency:
-      group: ${{ github.ref }}
-      cancel-in-progress: true
     timeout-minutes: 20
     runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        working-directory: ${{ inputs.working-directory }}
-
     steps:
 
       - uses: actions/checkout@v4
