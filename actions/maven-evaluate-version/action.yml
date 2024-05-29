@@ -1,0 +1,26 @@
+---
+name: 'evaluate Maven pom version'
+description: 'Evaluate the pom version of the Maven module'
+
+inputs:
+  working-directory:
+    required: false
+    description: 'If needed, the working directory for this action'
+    default: '.'
+
+outputs:
+  maven-version:
+    description: 'The version of the Maven module'
+    value: ${{ steps.evaluate-version.outputs.version }}
+
+runs:
+  using: 'composite'
+  steps:
+
+    - name: 'Evaluate module version'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      id: evaluate-version
+      run: |
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"

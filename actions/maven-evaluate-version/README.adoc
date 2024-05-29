@@ -1,0 +1,22 @@
+= Evaluate Maven version
+
+== Description
+
+This action runs a Maven command to extract the version of a Maven module.
+
+== Usage
+
+[source,yaml]
+----
+
+# ...
+
+jobs:
+  job-name:
+    # ...
+    steps:
+      - name: Evaluate version
+        uses: deroffal/github-actions/actions/maven-evaluate-version@main
+        with:
+          working-directory: (optional)
+----
