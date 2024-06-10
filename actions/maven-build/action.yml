@@ -32,12 +32,12 @@ runs:
     - name: 'Build and run unit tests'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: mvn clean test
+      run: mvn -B clean test
 
     - name: 'Run integration tests'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: mvn verify
+      run: mvn -B verify
 
     - name: 'Upload artifact'
       uses: actions/upload-artifact@v3
