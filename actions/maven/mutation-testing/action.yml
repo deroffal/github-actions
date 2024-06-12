@@ -7,23 +7,10 @@ inputs:
     required: false
     description: 'If needed, the working directory for this action'
     default: '.'
-  java-version:
-    required: false
-    default: '21'
-    description: 'Java version'
-  java-distribution:
-    required: false
-    default: 'temurin'
-    description: 'Java distribution'
 
 runs:
   using: 'composite'
   steps:
-
-    - uses: actions/setup-java@v4
-      with:
-        java-version: ${{ inputs.java-version }}
-        distribution: ${{ inputs.java-distribution }}
 
     - name: 'Perform mutation testing'
       shell: bash

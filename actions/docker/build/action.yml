@@ -1,0 +1,49 @@
+---
+name: 'Docker build'
+description: 'Build a Docker image'
+
+inputs:
+  image-name:
+    description: 'name of the Docker image'
+    required: true
+  working-directory:
+    required: false
+    description: 'If needed, the working directory for this action'
+    default: '.'
+  build-method:
+    required: false
+    description: 'Allow to chose between "dockerfile" and "springboot-maven"'
+
+runs:
+  using: composite
+  steps:
+
+    - name: 'Find build method'
+      id: find-build-method
+      if: ${{ inputs.build-method != '' }}
+      shell: 'bash'
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        if [ -e Dockerfile ]; then
+          echo "build method will be : dockerfile"
+          echo "build-method=dockerfile" >> $GITHUB_OUTPUT
+        elif [ -e pom.xml ]; then
+          echo "build method will be : maven (with springboot)"
+          echo "build-method=springboot-maven" >> $GITHUB_OUTPUT
+        else
+          echo "I don't know how to build Docker !"
+        fi
+
+    - name: 'Build Docker with Dockerfile'
+      if: ${{ inputs.build-method == 'dockerfile' || steps.find-build-method.outputs.build-method == 'dockerfile' }}
+      uses: deroffal/github-actions/actions/docker/build/with-dockerfile@main
+      with:
+        working-directory: ${{ inputs.working-directory }}
+        image-name: ${{ inputs.image-name }}
+
+    - name: 'Build Docker with Spring Boot and Maven'
+      if: ${{ inputs.build-method == 'springboot-maven' || steps.find-build-method.outputs.build-method == 'springboot-maven' }}
+      uses: deroffal/github-actions/actions/docker/build/with-action@main
+      with:
+        working-directory: ${{ inputs.working-directory }}
+        image-name: ${{ inputs.image-name }} .
