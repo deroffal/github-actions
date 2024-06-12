@@ -4,12 +4,10 @@ description: 'Build a Maven project'
 
 inputs:
   java-version:
-    required: false
-    default: '21'
+    required: true
     description: 'Java version'
   java-distribution:
-    required: false
-    default: 'temurin'
+    required: true
     description: 'Java distribution'
   artifact-path:
     required: false

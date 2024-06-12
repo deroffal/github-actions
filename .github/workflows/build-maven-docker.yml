@@ -13,8 +13,8 @@ on:
     inputs:
       java-version:
         required: false
-        default: '21'
-        type: string
+        default: 21
+        type: number
         description: 'Java version'
       java-distribution:
         required: false
@@ -25,6 +25,10 @@ on:
         required: false
         type: string
         description: 'If needed, the path of the artifact to upload (wildcards allowed)'
+      build-method:
+        required: false
+        type: string
+        description: 'Allow to chose Docker build method. Choice between "dockerfile" and "springboot-maven"'
       image-name:
         description: 'name of the Docker image'
         required: true
@@ -47,25 +51,26 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Build with Maven
-        uses: deroffal/github-actions/actions/maven-build@main
+      - name: 'Build with Maven'
+        uses: deroffal/github-actions/actions/maven/build@main
         with:
           java-version: ${{ inputs.java-version }}
           java-distribution: ${{ inputs.java-distribution }}
           artifact-path: ${{ inputs.artifact-path }}
           working-directory: ${{ inputs.working-directory }}
 
-      - name: Build Docker image
-        uses: deroffal/github-actions/actions/docker-build@main
+      - name: 'Build Docker image'
+        uses: deroffal/github-actions/actions/docker/build@main
         with:
           image-name: ${{ inputs.image-name }}
           working-directory: ${{ inputs.working-directory }}
 
-      - name: Push to Docker Hub
-        uses: deroffal/github-actions/actions/docker-push@main
+      - name: 'Push to Docker Hub'
+        uses: deroffal/github-actions/actions/docker/push@main
         with:
           dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
           dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
           image-name: ${{ inputs.image-name }}
           tag-name: ${{ inputs.tag-name }}
           working-directory: ${{ inputs.working-directory }}
+
