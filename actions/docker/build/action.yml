@@ -43,7 +43,7 @@ runs:
 
     - name: 'Build Docker with Spring Boot and Maven'
       if: ${{ inputs.build-method == 'springboot-maven' || steps.find-build-method.outputs.build-method == 'springboot-maven' }}
-      uses: deroffal/github-actions/actions/docker/build/with-action@main
+      uses: deroffal/github-actions/actions/docker/build/with-maven@main
       with:
         working-directory: ${{ inputs.working-directory }}
         image-name: ${{ inputs.image-name }} .
