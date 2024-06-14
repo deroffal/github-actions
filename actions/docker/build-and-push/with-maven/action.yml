@@ -13,9 +13,6 @@ inputs:
   dockerhub-token:
     description: 'token of Docker Hub account'
     required: true
-  build-method:
-    required: false
-    description: 'Allow to chose between "dockerfile" and "springboot-maven"'
   image-name:
     description: 'name of the Docker image'
     required: true
