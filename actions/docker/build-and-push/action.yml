@@ -29,11 +29,10 @@ runs:
 
     - name: 'Find build method'
       id: find-build-method
-    #  if: ${{ inputs.build-method != '' }}
+      if: ${{ inputs.build-method == '' }}
       shell: 'bash'
       working-directory: ${{ inputs.working-directory }}
       run: |
-        echo "build method : -${{ inputs.build-method }}:${{ inputs.build-method != '' }}-"
         if [ -e Dockerfile ]; then
           echo "build method will be : dockerfile"
           echo "build-method=dockerfile" >> $GITHUB_OUTPUT
