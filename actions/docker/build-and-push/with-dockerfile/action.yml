@@ -1,0 +1,49 @@
+---
+name: 'Docker build'
+description: 'Build a Docker image. Adapted from https://docs.docker.com/build/ci/github-actions/multi-platform/ to be able to run on other platforms.'
+
+inputs:
+  working-directory:
+    required: false
+    description: 'If needed, the working directory for this action'
+    default: '.'
+  dockerhub-username:
+    description: 'username of Docker Hub account'
+    required: true
+  dockerhub-token:
+    description: 'token of Docker Hub account'
+    required: true
+  build-method:
+    required: false
+    description: 'Allow to chose between "dockerfile" and "springboot-maven"'
+  image-name:
+    description: 'name of the Docker image'
+    required: true
+  tag-name:
+    description: 'name of the tag to push'
+    required: true
+
+runs:
+  using: composite
+  steps:
+
+    - name: 'Set up QEMU'
+      uses: docker/setup-qemu-action@v3
+
+    - name: 'Set up Docker Buildx'
+      uses: docker/setup-buildx-action@v3
+
+    - name: 'Login to Docker Hub'
+      uses: docker/login-action@master
+      with:
+        username: ${{ inputs.dockerhub-username }}
+        password: ${{ inputs.dockerhub-token }}
+
+    - name: 'Build & push to Docker Hub'
+      uses: docker/build-push-action@v5
+      with:
+        platforms: linux/amd64,linux/arm64
+        context: ${{ inputs.working-directory }}
+        push: true
+        tags: ${{ inputs.image-name }}:${{ inputs.tag-name }}
+

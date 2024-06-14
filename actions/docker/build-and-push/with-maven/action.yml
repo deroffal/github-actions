@@ -1,24 +1,27 @@
 ---
-name: 'Docker push'
-description: 'Push a Docker image to Docker Hub'
+name: 'Docker build'
+description: 'Build a Docker image with spring-boot:build-image goal.'
 
 inputs:
-  image-name:
-    description: 'name of the Docker image'
-    required: true
-  tag-name:
-    description: 'name of the tag to push'
-    required: true
+  working-directory:
+    required: false
+    description: 'If needed, the working directory for this action'
+    default: '.'
   dockerhub-username:
     description: 'username of Docker Hub account'
     required: true
   dockerhub-token:
     description: 'token of Docker Hub account'
     required: true
-  working-directory:
+  build-method:
     required: false
-    description: 'If needed, the working directory for this action'
-    default: '.'
+    description: 'Allow to chose between "dockerfile" and "springboot-maven"'
+  image-name:
+    description: 'name of the Docker image'
+    required: true
+  tag-name:
+    description: 'name of the tag to push'
+    required: true
 
 runs:
   using: composite
@@ -30,9 +33,13 @@ runs:
         username: ${{ inputs.dockerhub-username }}
         password: ${{ inputs.dockerhub-token }}
 
-    - name: 'Push to Docker Hub'
+    - name: 'Build Docker'
       shell: 'bash'
       working-directory: ${{ inputs.working-directory }}
+      run: mvn -B spring-boot:build-image -Dspring-boot.build-image.imageName=${{ inputs.image-name }} -DskipTests=true
+
+    - name: 'Push to Docker Hub'
+      shell: 'bash'
       run: |
         docker tag ${{ inputs.image-name }} ${{ inputs.image-name }}:${{ inputs.tag-name }}
         docker push ${{ inputs.image-name }}:${{ inputs.tag-name }}

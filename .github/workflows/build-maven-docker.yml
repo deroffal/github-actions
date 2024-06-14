@@ -59,18 +59,12 @@ jobs:
           artifact-path: ${{ inputs.artifact-path }}
           working-directory: ${{ inputs.working-directory }}
 
-      - name: 'Build Docker image'
-        uses: deroffal/github-actions/actions/docker/build@main
+      - name: 'Build and push Docker image'
+        uses: deroffal/github-actions/actions/docker/build-and-push@main
         with:
-          image-name: ${{ inputs.image-name }}
           working-directory: ${{ inputs.working-directory }}
-
-      - name: 'Push to Docker Hub'
-        uses: deroffal/github-actions/actions/docker/push@main
-        with:
           dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
           dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
           image-name: ${{ inputs.image-name }}
           tag-name: ${{ inputs.tag-name }}
-          working-directory: ${{ inputs.working-directory }}
 

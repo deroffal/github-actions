@@ -3,16 +3,25 @@ name: 'Docker build'
 description: 'Build a Docker image'
 
 inputs:
-  image-name:
-    description: 'name of the Docker image'
-    required: true
   working-directory:
     required: false
     description: 'If needed, the working directory for this action'
     default: '.'
+  dockerhub-username:
+    description: 'username of Docker Hub account'
+    required: true
+  dockerhub-token:
+    description: 'token of Docker Hub account'
+    required: true
   build-method:
     required: false
     description: 'Allow to chose between "dockerfile" and "springboot-maven"'
+  image-name:
+    description: 'name of the Docker image'
+    required: true
+  tag-name:
+    description: 'name of the tag to push'
+    required: true
 
 runs:
   using: composite
@@ -36,14 +45,20 @@ runs:
 
     - name: 'Build Docker with Dockerfile'
       if: ${{ inputs.build-method == 'dockerfile' || steps.find-build-method.outputs.build-method == 'dockerfile' }}
-      uses: deroffal/github-actions/actions/docker/build/with-dockerfile@main
+      uses: deroffal/github-actions/actions/docker/build-and-push/with-dockerfile@main
       with:
         working-directory: ${{ inputs.working-directory }}
+        dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+        dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
         image-name: ${{ inputs.image-name }}
+        tag-name: ${{ inputs.tag-name }}
 
     - name: 'Build Docker with Spring Boot and Maven'
       if: ${{ inputs.build-method == 'springboot-maven' || steps.find-build-method.outputs.build-method == 'springboot-maven' }}
-      uses: deroffal/github-actions/actions/docker/build/with-maven@main
+      uses: deroffal/github-actions/actions/docker/build-and-push/with-maven@main
       with:
         working-directory: ${{ inputs.working-directory }}
-        image-name: ${{ inputs.image-name }} .
+        dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+        dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+        image-name: ${{ inputs.image-name }}
+        tag-name: ${{ inputs.tag-name }}
