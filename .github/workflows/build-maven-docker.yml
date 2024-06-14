@@ -65,6 +65,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
           dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
           dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+          build-method: ${{ inputs.build-method }}
           image-name: ${{ inputs.image-name }}
           tag-name: ${{ inputs.tag-name }}
 
