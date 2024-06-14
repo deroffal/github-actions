@@ -48,8 +48,8 @@ runs:
       uses: deroffal/github-actions/actions/docker/build-and-push/with-dockerfile@main
       with:
         working-directory: ${{ inputs.working-directory }}
-        dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
-        dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+        dockerhub-username: ${{ inputs.DOCKERHUB_USERNAME }}
+        dockerhub-token: ${{ inputs.DOCKERHUB_TOKEN }}
         image-name: ${{ inputs.image-name }}
         tag-name: ${{ inputs.tag-name }}
 
@@ -58,7 +58,7 @@ runs:
       uses: deroffal/github-actions/actions/docker/build-and-push/with-maven@main
       with:
         working-directory: ${{ inputs.working-directory }}
-        dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
-        dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+        dockerhub-username: ${{ inputs.DOCKERHUB_USERNAME }}
+        dockerhub-token: ${{ inputs.DOCKERHUB_TOKEN }}
         image-name: ${{ inputs.image-name }}
         tag-name: ${{ inputs.tag-name }}
