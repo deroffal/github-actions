@@ -51,9 +51,6 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: 'Ensure secrets are provided'
-        run: echo ${{ secrets.DOCKERHUB_USERNAME != ''}} & ${{ secrets.DOCKERHUB_TOKEN != ''}}
-
       - name: 'Build with Maven'
         uses: deroffal/github-actions/actions/maven/build@main
         with:
