@@ -79,7 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: ${{ inputs.working-directory }}
-        run: mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+        run: mvn -B -P coverage clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ inputs.sonar-project-key }}
 
       - name: 'Mutation tests'
         working-directory: ${{ inputs.working-directory }}
