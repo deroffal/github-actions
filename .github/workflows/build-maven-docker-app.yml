@@ -12,19 +12,13 @@ on:
         description: 'Token of Docker Hub account'
     inputs:
       java-version:
-        required: false
-        default: 21
+        required: true
         type: number
         description: 'Java version'
       java-distribution:
-        required: false
-        default: 'temurin'
+        required: true
         type: string
         description: 'Java distribution'
-      artifact-path:
-        required: false
-        type: string
-        description: 'If needed, the path of the artifact to upload (wildcards allowed)'
       build-method:
         required: false
         type: string
@@ -54,10 +48,9 @@ jobs:
       - name: 'Build with Maven'
         uses: deroffal/github-actions/actions/maven/build@main
         with:
+          working-directory: ${{ inputs.working-directory }}
           java-version: ${{ inputs.java-version }}
           java-distribution: ${{ inputs.java-distribution }}
-          artifact-path: ${{ inputs.artifact-path }}
-          working-directory: ${{ inputs.working-directory }}
 
       - name: 'Build and push Docker image'
         uses: deroffal/github-actions/actions/docker/build-and-push@main

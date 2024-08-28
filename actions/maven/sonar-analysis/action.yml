@@ -1,0 +1,54 @@
+---
+name: 'Sonar analysis'
+description: 'Perform Sonar analysis'
+
+inputs:
+  java-version:
+    required: false
+    default: '21'
+    type: string
+    description: 'Java version'
+  java-distribution:
+    required: false
+    default: 'temurin'
+    type: string
+    description: 'Java distribution'
+  working-directory:
+    type: string
+    description: 'Working directory of the build'
+    default: '.'
+    required: false
+  sonar-project-key:
+    type: string
+    description: 'project for Sonarcloud analysis'
+    required: false
+  GITHUB_TOKEN:
+    type: string
+    description: 'GitHub token'
+    required: true
+  SONAR_TOKEN:
+    type: string
+    description: 'Sonarcloud token'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 'Set up JDK'
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ inputs.java-version }}
+        distribution: ${{ inputs.java-distribution }}
+
+    - name: 'Sonar analysis'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ inputs.SONAR_TOKEN }}
+      working-directory: ${{ inputs.working-directory }}
+      run: mvn -B -P coverage clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ inputs.sonar-project-key }}
