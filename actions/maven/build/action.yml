@@ -9,9 +9,6 @@ inputs:
   java-distribution:
     required: true
     description: 'Java distribution'
-  artifact-path:
-    required: false
-    description: 'If needed, the path of the artifact to upload (wildcards allowed)'
   working-directory:
     required: false
     description: 'If needed, the working directory for this action'
@@ -30,16 +27,4 @@ runs:
     - name: 'Build and run unit tests'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: mvn -B clean test
-
-    - name: 'Run integration tests'
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      run: mvn -B verify
-
-    - name: 'Upload artifact'
-      uses: actions/upload-artifact@v3
-      if: ${{ inputs.artifact-path != '' }}
-      with:
-        name: 'build-artifact'
-        path: ${{ inputs.artifact-path }}
+      run: mvn -B clean verify

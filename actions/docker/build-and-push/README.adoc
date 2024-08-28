@@ -2,7 +2,14 @@
 
 == Description
 
-The action will look for :
+The action take `build-method` as parameter, to choose the build method.
+Allowable values are :
+
+* `dockerfile` -> to build with Docker
+* `springboot-maven` -> to build with Springboot Docker Maven plugin
+
+
+If the parameter is not provided, the action will look for :
 
 * a `Dockerfile` -> to build with Docker
 * a `pom.xml` -> to build with Springboot Docker Maven plugin
@@ -21,8 +28,12 @@ jobs:
     # ...
     steps:
       - name: Build with Docker
-        uses: deroffal/github-actions/actions/docker-build@main
+        uses: deroffal/github-actions/actions/docker/build-and-push@main
         with:
-          image-name:
+          dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+          image-name: ${{ inputs.image-name }}
+          tag-name: ${{ inputs.tag-name }}
           working-directory: (optional)
+          build-method: (optional)
 ----
