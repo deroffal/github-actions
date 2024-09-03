@@ -1,0 +1,30 @@
+---
+name: 'Docker compose: evaluate port'
+description: 'Returns the public port of a docker-compose service'
+
+inputs:
+  service-name:
+    required: true
+    description: 'Name of the service'
+  private-port:
+    description: 'Private port related to the desired port'
+    required: true
+outputs:
+  public-port:
+    description: 'The value of the public port'
+    value: ${{ steps.find-public-port.outputs.port }}
+
+runs:
+  using: composite
+  steps:
+
+    - name: 'Find public port'
+      id: find-public-port
+      env:
+        service: ${{ inputs.service-name }}
+        port: ${{ inputs.private-port }}
+      shell: bash
+      run: |
+        port=$(docker compose port ${{ env.service }} ${{ env.port }} | awk -F ':' '{print $2}')
+        echo "public port: ${port}"
+        echo "port=${port}" >> $GITHUB_OUTPUT
