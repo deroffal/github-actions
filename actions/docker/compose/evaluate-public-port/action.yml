@@ -9,6 +9,10 @@ inputs:
   private-port:
     description: 'Private port related to the desired port'
     required: true
+  file:
+    required: false
+    default: docker-compose.yaml
+    description: 'Location of docker-compose.yaml file'
 outputs:
   public-port:
     description: 'The value of the public port'
@@ -25,6 +29,6 @@ runs:
         port: ${{ inputs.private-port }}
       shell: bash
       run: |
-        port=$(docker compose port ${{ env.service }} ${{ env.port }} | awk -F ':' '{print $2}')
+        port=$(docker compose -f ${{ inputs.file }} port ${{ env.service }} ${{ env.port }} | awk -F ':' '{print $2}')
         echo "public port: ${port}"
         echo "port=${port}" >> $GITHUB_OUTPUT
