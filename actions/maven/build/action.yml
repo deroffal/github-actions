@@ -13,6 +13,19 @@ inputs:
     required: false
     description: 'If needed, the working directory for this action'
     default: '.'
+  file:
+    required: false
+    default: ''
+    description: |
+      See "mvn -f <arg>"
+      Force the use of an alternate POM file.
+  projects:
+    required: false
+    default: ''
+    description: |
+      See "mvn -pl <arg>"
+      Comma-delimited list of specified reactor projects to build instead of all projects.
+      A project can be specified by [groupId]:artifactId or by its relative path'
 
 runs:
   using: 'composite'
@@ -24,7 +37,21 @@ runs:
         distribution: ${{ inputs.java-distribution }}
         settings-path: ${{ github.workspace }}
 
+    - name: 'Determine mvn options'
+      shell: bash
+      id: mvn-options
+      run: |
+        CONTEXT=""
+        if [ -n "${{ inputs.file }}" ]; then
+          CONTEXT="$CONTEXT -f ${{ inputs.file }}"
+        fi
+        if [ -n "${{ inputs.projects }}" ]; then
+          CONTEXT="$CONTEXT -pl ${{ inputs.projects }} -am"
+        fi
+        echo "mvn-opts=$CONTEXT"
+        echo "mvn-opts=$CONTEXT" >> $GITHUB_OUTPUT
+
     - name: 'Build and run unit tests'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: mvn -B clean verify
+      run: mvn -B clean verify ${{ steps.mvn-options.outputs.mvn-opts }}
