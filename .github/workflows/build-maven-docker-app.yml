@@ -28,15 +28,26 @@ on:
         required: true
         type: string
       tag-name:
-        description: 'tag of the Docker image'
         required: true
+        description: 'tag of the Docker image'
         type: string
       working-directory:
-        type: string
-        description: 'Working directory of the build'
-        default: '.'
         required: false
-
+        description: 'Working directory of the build'
+        type: string
+        default: '.'
+      file:
+        required: false
+        description: |
+          See "mvn -f <arg>", and description in action https://github.com/deroffal/github-actions/blob/main/actions/maven/build/action.yml.
+        default: ''
+        type: string
+      projects:
+        required: false
+        description: |
+          See "mvn -pl <arg>", and description in action https://github.com/deroffal/github-actions/blob/main/actions/maven/build/action.yml.
+        default: ''
+        type: string
 jobs:
   build-maven-docker:
     timeout-minutes: 20
@@ -51,6 +62,9 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
           java-version: ${{ inputs.java-version }}
           java-distribution: ${{ inputs.java-distribution }}
+          file: ${{ inputs.file }}
+          projects: ${{ inputs.projects }}
+
 
       - name: 'Build and push Docker image'
         uses: deroffal/github-actions/actions/docker/build-and-push@main
