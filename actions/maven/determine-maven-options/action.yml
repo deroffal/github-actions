@@ -1,0 +1,43 @@
+---
+name: 'Determine Maven options'
+description: |
+  Internal action.
+  Its goal is to create the options of a Maven command line, according to input parameters.
+
+inputs:
+  file:
+    required: false
+    default: ''
+    description: |
+      See "mvn -f <arg>"
+      Force the use of an alternate POM file.
+  projects:
+    required: false
+    default: ''
+    description: |
+      See "mvn -pl <arg>"
+      Comma-delimited list of specified reactor projects to build instead of all projects.
+      A project can be specified by [groupId]:artifactId or by its relative path'
+
+outputs:
+  options:
+    description: 'The options for the Maven command'
+    value: ${{ steps.determine-options.outputs.options }}
+
+runs:
+  using: 'composite'
+  steps:
+
+    - name: 'Determine Maven options'
+      shell: bash
+      id: determine-options
+      run: |
+        CONTEXT=""
+        if [ -n "${{ inputs.file }}" ]; then
+          CONTEXT="$CONTEXT -f ${{ inputs.file }}"
+        fi
+        if [ -n "${{ inputs.projects }}" ]; then
+          CONTEXT="$CONTEXT -pl ${{ inputs.projects }} -am"
+        fi
+        echo "options=$CONTEXT"
+        echo "options=$CONTEXT" >> $GITHUB_OUTPUT

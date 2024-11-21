@@ -38,20 +38,13 @@ runs:
         settings-path: ${{ github.workspace }}
 
     - name: 'Determine mvn options'
-      shell: bash
       id: mvn-options
-      run: |
-        CONTEXT=""
-        if [ -n "${{ inputs.file }}" ]; then
-          CONTEXT="$CONTEXT -f ${{ inputs.file }}"
-        fi
-        if [ -n "${{ inputs.projects }}" ]; then
-          CONTEXT="$CONTEXT -pl ${{ inputs.projects }} -am"
-        fi
-        echo "mvn-opts=$CONTEXT"
-        echo "mvn-opts=$CONTEXT" >> $GITHUB_OUTPUT
+      uses: deroffal/github-actions/actions/maven/determine-maven-options@main
+      with:
+        file: ${{ inputs.file }}
+        projects: ${{ inputs.projects }}
 
     - name: 'Build and run unit tests'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: mvn -B clean verify ${{ steps.mvn-options.outputs.mvn-opts }}
+      run: mvn -B clean verify ${{ steps.mvn-options.outputs.options }}

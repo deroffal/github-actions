@@ -7,12 +7,32 @@ inputs:
     required: false
     description: 'If needed, the working directory for this action'
     default: '.'
+  file:
+    required: false
+    default: ''
+    description: |
+      See "mvn -f <arg>"
+      Force the use of an alternate POM file.
+  projects:
+    required: false
+    default: ''
+    description: |
+      See "mvn -pl <arg>"
+      Comma-delimited list of specified reactor projects to build instead of all projects.
+      A project can be specified by [groupId]:artifactId or by its relative path'
 
 runs:
   using: 'composite'
   steps:
 
+    - name: 'Determine mvn options'
+      id: mvn-options
+      uses: deroffal/github-actions/actions/maven/determine-maven-options@main
+      with:
+        file: ${{ inputs.file }}
+        projects: ${{ inputs.projects }}
+
     - name: 'Perform mutation testing'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: mvn -B clean test-compile org.pitest:pitest-maven:mutationCoverage
+      run: mvn -B clean test-compile org.pitest:pitest-maven:mutationCoverage ${{ steps.mvn-options.outputs.options }}
