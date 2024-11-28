@@ -52,3 +52,11 @@ runs:
         SONAR_TOKEN: ${{ inputs.SONAR_TOKEN }}
       working-directory: ${{ inputs.working-directory }}
       run: mvn -B -P coverage clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+
+    - name: 'Test Report'
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: JUnit tests report
+        path: '**/target/surefire-reports/TEST-*.xml'
+        reporter: java-junit

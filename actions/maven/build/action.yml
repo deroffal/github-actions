@@ -48,3 +48,11 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: mvn -B clean verify ${{ steps.mvn-options.outputs.options }}
+
+    - name: 'Test Report'
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: JUnit tests report
+        path: '**/target/surefire-reports/TEST-*.xml'
+        reporter: java-junit
