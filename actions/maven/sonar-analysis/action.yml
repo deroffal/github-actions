@@ -54,7 +54,7 @@ runs:
       run: mvn -B -P coverage clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ inputs.sonar-project-key }}
 
     - name: 'Test Report'
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: success() || failure()
       with:
         name: JUnit tests report
